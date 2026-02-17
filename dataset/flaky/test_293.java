@@ -1,0 +1,17 @@
+class DummyClass_293 {
+@Test
+public void shutdownDatabaseDuringIndexPopulations() {
+    AssertableLogProvider assertableLogProvider = new AssertableLogProvider(true);
+    File storeDir = directory.directory("shutdownDbTest");
+    Label testLabel = Label.label("testLabel");
+    String propertyName = "testProperty";
+    GraphDatabaseService shutDownDb = new TestGraphDatabaseFactory().setInternalLogProvider(assertableLogProvider).newEmbeddedDatabase(storeDir);
+    prePopulateDatabase(shutDownDb, testLabel, propertyName);
+    try (final Transaction transaction = shutDownDb.beginTx()) {
+        shutDownDb.schema().indexFor(testLabel).on(propertyName).create();
+        transaction.success();
+    }
+    shutDownDb.shutdown();
+    assertableLogProvider.assertNone(AssertableLogProvider.inLog(IndexPopulationJob.class).anyError());
+}
+}

@@ -1,0 +1,11 @@
+class DummyClass_91436 {
+    @Test
+    public void testPluginInstalled() {
+        try (TransportClient client = new PreBuiltTransportClient(Settings.EMPTY)) {
+            Settings settings = client.settings();
+            assertEquals(Netty4Plugin.NETTY_TRANSPORT_NAME, NetworkModule.HTTP_DEFAULT_TYPE_SETTING.get(settings));
+            assertEquals(Netty4Plugin.NETTY_TRANSPORT_NAME, NetworkModule.TRANSPORT_DEFAULT_TYPE_SETTING.get(settings));
+        }
+    }
+
+}

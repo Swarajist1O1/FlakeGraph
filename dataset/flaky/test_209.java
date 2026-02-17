@@ -1,0 +1,15 @@
+class DummyClass_209 {
+@Test
+public void testHftpCustomDefaultPorts() throws IOException {
+    resetFileSystem();
+    Configuration conf = new Configuration();
+    conf.setInt("dfs.http.port", 123);
+    conf.setInt("dfs.https.port", 456);
+    URI uri = URI.create();
+    HftpFileSystem fs = ((HftpFileSystem) (FileSystem.get(uri, conf)));
+    assertEquals(123, fs.getDefaultPort());
+    assertEquals(456, fs.getDefaultSecurePort());
+    assertEquals(uri, fs.getUri());
+    assertEquals("127.0.0.1:456", fs.getCanonicalServiceName());
+}
+}

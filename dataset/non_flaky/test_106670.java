@@ -1,0 +1,18 @@
+class DummyClass_106670 {
+  @Test
+  public void freeException() throws Exception {
+    AlluxioURI file = new AlluxioURI("/file");
+    FreePOptions freeOptions = FreePOptions.newBuilder().setRecursive(true).build();
+    doThrow(EXCEPTION).when(mFileSystemMasterClient).free(file,
+        FileSystemOptions.freeDefaults(mConf).toBuilder().mergeFrom(freeOptions).build());
+    try {
+      mFileSystem.free(file, freeOptions);
+      fail(SHOULD_HAVE_PROPAGATED_MESSAGE);
+    } catch (Exception e) {
+      assertSame(EXCEPTION, e);
+    }
+
+    verifyFilesystemContextAcquiredAndReleased();
+  }
+
+}

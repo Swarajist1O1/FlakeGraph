@@ -1,0 +1,9 @@
+class DummyClass_331 {
+@Test
+public void testSetCallbackWithNull() throws Exception {
+    mSession.setActive(true);
+    mCallback.reset(1);
+    mSession.setCallback(null, mHandler);
+    assertEquals("Callback shouldn't be called.", 0, mCallback.mOnPlayCalledCount);
+}
+}

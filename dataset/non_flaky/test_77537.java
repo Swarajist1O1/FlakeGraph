@@ -1,0 +1,10 @@
+class DummyClass_77537 {
+    @Test
+    public void testDefaultConstraintViolation() {
+        assertThat(RESOURCES.target("/person/blah/index")
+            .queryParam("ind", -1).request()
+            .get().readEntity(String.class))
+            .isEqualTo("Invalid data");
+    }
+
+}

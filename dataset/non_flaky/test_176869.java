@@ -1,0 +1,9 @@
+class DummyClass_176869 {
+  @Test
+  public void testExists() {
+    assertTrue(ClassUtils.classExists("java.lang.String"));
+    assertTrue(ClassUtils.classExists("com.cloudera.oryx.common.lang.ClassUtils"));
+    assertFalse(ClassUtils.classExists("java.Foo"));
+  }
+
+}

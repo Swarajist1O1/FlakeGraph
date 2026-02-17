@@ -1,0 +1,18 @@
+class DummyClass_135031 {
+    @Test
+    public void testParseChromeDate() {
+
+        String chromeHeader = "Mon, 31 Mar 2014 09:44:00 GMT";
+        Date chromeDate = DateUtils.parseDate(chromeHeader);
+
+        Assert.assertNotNull(chromeDate);
+
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        calendar.set(2014, Calendar.MARCH, 31, 9, 44, 00);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        Assert.assertEquals(calendar.getTime(), chromeDate);
+
+    }
+
+}

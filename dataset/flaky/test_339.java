@@ -1,0 +1,15 @@
+class DummyClass_339 {
+@Test
+public void appliesOuterTimeout() {
+    final WaitStrategy underTest = new WaitAllStrategy()
+    .withStrategy(strategy1)
+    .withStartupTimeout(Duration.ofMillis(10));
+    doAnswer(invocation -> {
+        Uninterruptibles.sleepUninterruptibly(20, TimeUnit.MILLISECONDS);
+        return null;
+    }).when(strategy1).waitUntilReady(eq(container));
+    assertThrows("The outer strategy timeout applies", TimeoutException.class, () -> {
+        underTest.waitUntilReady(container);
+    });
+}
+}

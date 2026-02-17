@@ -1,0 +1,10 @@
+class DummyClass_95687 {
+    @Test
+    public void shouldReturnNullWhenStateDoesntExist() {
+
+        final FeatureState state = repository.getFeatureState(TestFeature.F1);
+
+        assertNull(state);
+    }
+
+}

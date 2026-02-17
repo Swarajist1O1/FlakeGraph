@@ -1,0 +1,7 @@
+class DummyClass_135044 {
+    @Test(expected = IOException.class)
+    public void testIpV4Hostname() throws IOException {
+        NetworkUtils.parseIpv4Address("localhost");
+    }
+
+}

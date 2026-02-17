@@ -1,0 +1,7 @@
+class DummyClass_176892 {
+  @Test
+  public void testToString() {
+    assertEquals("3.0,foo", new Pair<>(3.0, "foo").toString());
+  }
+
+}

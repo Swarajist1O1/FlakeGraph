@@ -1,0 +1,15 @@
+class DummyClass_95723 {
+    @Test(expected = IllegalStateException.class)
+    public void shouldFailIfAddingStrategyWithCustomProvider() {
+
+        CustomStrategyProvider provider = new CustomStrategyProvider();
+
+        FeatureManagerBuilder.begin()
+            .featureEnum(Features.class)
+            .activationStrategyProvider(provider)
+            .activationStrategy(new CustomActivationStrategy())
+            .build();
+
+    }
+
+}

@@ -1,0 +1,33 @@
+class DummyClass_135058 {
+    @Test
+    public void testSimplePrefixCase() {
+
+        PathMatcher<String> pathMatcher = new PathMatcher<>();
+
+        pathMatcher.addPrefixPath("prefix", "response");
+        Assert.assertEquals("response", pathMatcher.getPrefixPath("prefix"));
+        Assert.assertEquals("response", pathMatcher.getPrefixPath("/prefix"));
+        Assert.assertEquals("response", pathMatcher.getPrefixPath("/prefix/"));
+
+        pathMatcher.addPrefixPath("/prefix", "new response");
+        Assert.assertEquals("new response", pathMatcher.getPrefixPath("prefix"));
+        Assert.assertEquals("new response", pathMatcher.getPrefixPath("/prefix"));
+        Assert.assertEquals("new response", pathMatcher.getPrefixPath("/prefix/"));
+
+        pathMatcher.addPrefixPath("/prefix/", "different response");
+        Assert.assertEquals("different response", pathMatcher.getPrefixPath("prefix"));
+        Assert.assertEquals("different response", pathMatcher.getPrefixPath("/prefix"));
+        Assert.assertEquals("different response", pathMatcher.getPrefixPath("/prefix/"));
+
+        pathMatcher.addPrefixPath("/prefix//////////////////////", "last response");
+        Assert.assertEquals("last response", pathMatcher.getPrefixPath("prefix"));
+        Assert.assertEquals("last response", pathMatcher.getPrefixPath("/prefix"));
+        Assert.assertEquals("last response", pathMatcher.getPrefixPath("/prefix/"));
+
+        pathMatcher.clearPaths();
+        Assert.assertNull(pathMatcher.getPrefixPath("prefix"));
+        Assert.assertNull(pathMatcher.getPrefixPath("/prefix"));
+        Assert.assertNull(pathMatcher.getPrefixPath("/prefix/"));
+    }
+
+}

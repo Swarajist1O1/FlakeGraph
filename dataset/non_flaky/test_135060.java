@@ -1,0 +1,19 @@
+class DummyClass_135060 {
+    @Test
+    public void testSimpleDefaultCase() {
+
+        PathMatcher<String> pathMatcher = new PathMatcher<>();
+
+        pathMatcher.addPrefixPath("/", "default");
+        Assert.assertEquals("default", pathMatcher.getPrefixPath("/"));
+        Assert.assertEquals("default", pathMatcher.match("/").getValue());
+
+        pathMatcher.addPrefixPath("//////", "needs normalize default");
+        Assert.assertEquals("needs normalize default", pathMatcher.getPrefixPath("/"));
+        Assert.assertEquals("needs normalize default", pathMatcher.match("/").getValue());
+
+        pathMatcher.clearPaths();
+        Assert.assertNull(pathMatcher.getPrefixPath("/"));
+    }
+
+}

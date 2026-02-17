@@ -1,0 +1,13 @@
+class DummyClass_95647 {
+    @Test
+    public void shouldBeActiveForMobile() throws Exception {
+        String[] mobileOn = new String[]{"NO", "NO", "YES"};
+        assertThat(requestFrom(NORMAL)).isInactiveWithParams(mobileOn);
+        cleanup();
+        assertThat(requestFrom(TABLET)).isInactiveWithParams(mobileOn);
+        cleanup();
+        assertThat(requestFrom(MOBILE)).isActiveWithParams(mobileOn);
+        cleanup();
+    }
+
+}

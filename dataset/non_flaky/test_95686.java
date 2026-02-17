@@ -1,0 +1,13 @@
+class DummyClass_95686 {
+    @Test
+    public void testGuiceIntegration() throws IOException {
+
+        FeatureManager featureManager = FeatureContext.getFeatureManagerOrNull();
+
+        assertThat(featureManager).isNotNull();
+        assertThat(featureManager.getFeatures())
+            .containsExactly(GuiceFeatures.FEATURE1, GuiceFeatures.FEATURE2);
+
+    }
+
+}

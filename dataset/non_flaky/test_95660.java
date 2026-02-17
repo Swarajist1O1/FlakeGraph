@@ -1,0 +1,15 @@
+class DummyClass_95660 {
+    @Test
+    public void shouldSupportReadingWithNamedFeature() {
+
+        // enable
+        manager.enable(MyFeatures.ONE);
+        assertTrue(manager.isActive(new NamedFeature("ONE")));
+
+        // disable
+        manager.disable(MyFeatures.ONE);
+        assertFalse(manager.isActive(new NamedFeature("ONE")));
+
+    }
+
+}

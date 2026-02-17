@@ -1,0 +1,11 @@
+class DummyClass_136 {
+@Test
+public void serverStatusUnthrottledIfJournalUtilizationIsLowerThanThreshold() throws Exception {
+    serverStatus.throttle();
+    final Size segmentSize = Size.kilobytes(1L);
+    final KafkaJournal journal = new KafkaJournal(journalDirectory, scheduler, segmentSize, Duration.standardSeconds(1L), Size.kilobytes(4L), Duration.standardSeconds(1L), 1000000, Duration.standardSeconds(1L), 90, new MetricRegistry(), serverStatus);
+    journal.flushDirtyLogs();
+    journal.cleanupLogs();
+    assertThat(serverStatus.getLifecycle()).isEqualTo(RUNNING);
+}
+}

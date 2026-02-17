@@ -1,0 +1,17 @@
+class DummyClass_77460 {
+    @Test
+    public void testReproducible() throws IOException {
+        if (ITER++ == 0) {
+            CLUSTER_SEED = cluster().seed();
+            for (int i = 0; i < SEQUENCE.length; i++) {
+                SEQUENCE[i] = randomLong();
+            }
+        } else {
+            assertEquals(CLUSTER_SEED, Long.valueOf(cluster().seed()));
+            for (int i = 0; i < SEQUENCE.length; i++) {
+                assertThat(SEQUENCE[i], equalTo(randomLong()));
+            }
+        }
+    }
+
+}

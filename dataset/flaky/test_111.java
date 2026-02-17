@@ -1,0 +1,10 @@
+class DummyClass_111 {
+@Test
+public void testWithStringAndConfForBuggyPath() throws Exception {
+    dirString = "file" ;
+    testDir = new Path(dirString);
+    item = new PathData(dirString, conf);
+    assertEquals("file:/tmp", testDir.toString());
+    checkPathData();
+}
+}

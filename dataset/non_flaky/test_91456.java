@@ -1,0 +1,46 @@
+class DummyClass_91456 {
+@TestLogging("_root:DEBUG,org.elasticsearch.indices.recovery:TRACE,org.elasticsearch.index.shard.service:TRACE")
+    public void testSimpleRelocationNoIndexing() {
+        logger.info("--> starting [node1] ...");
+        final String node_1 = internalCluster().startNode();
+
+        logger.info("--> creating test index ...");
+        prepareCreate("test", Settings.builder()
+                .put("index.number_of_shards", 1)
+                .put("index.number_of_replicas", 0)
+        ).get();
+
+        logger.info("--> index 10 docs");
+        for (int i = 0; i < 10; i++) {
+            client().prepareIndex("test", "type", Integer.toString(i)).setSource("field", "value" + i).execute().actionGet();
+        }
+        logger.info("--> flush so we have an actual index");
+        client().admin().indices().prepareFlush().execute().actionGet();
+        logger.info("--> index more docs so we have something in the translog");
+        for (int i = 10; i < 20; i++) {
+            client().prepareIndex("test", "type", Integer.toString(i)).setSource("field", "value" + i).execute().actionGet();
+        }
+
+        logger.info("--> verifying count");
+        client().admin().indices().prepareRefresh().execute().actionGet();
+        assertThat(client().prepareSearch("test").setSize(0).execute().actionGet().getHits().getTotalHits(), equalTo(20L));
+
+        logger.info("--> start another node");
+        final String node_2 = internalCluster().startNode();
+        ClusterHealthResponse clusterHealthResponse = client().admin().cluster().prepareHealth().setWaitForEvents(Priority.LANGUID).setWaitForNodes("2").execute().actionGet();
+        assertThat(clusterHealthResponse.isTimedOut(), equalTo(false));
+
+        logger.info("--> relocate the shard from node1 to node2");
+        client().admin().cluster().prepareReroute()
+                .add(new MoveAllocationCommand("test", 0, node_1, node_2))
+                .execute().actionGet();
+
+        clusterHealthResponse = client().admin().cluster().prepareHealth().setWaitForEvents(Priority.LANGUID).setWaitForNoRelocatingShards(true).setTimeout(ACCEPTABLE_RELOCATION_TIME).execute().actionGet();
+        assertThat(clusterHealthResponse.isTimedOut(), equalTo(false));
+
+        logger.info("--> verifying count again...");
+        client().admin().indices().prepareRefresh().execute().actionGet();
+        assertThat(client().prepareSearch("test").setSize(0).execute().actionGet().getHits().getTotalHits(), equalTo(20L));
+    }
+
+}

@@ -1,0 +1,13 @@
+class DummyClass_95645 {
+    @Test
+    public void shouldBeActiveForDesktop() throws Exception {
+        String[] desktopOn = new String[]{"YES", "NO", "NO"};
+        assertThat(requestFrom(NORMAL)).isActiveWithParams(desktopOn);
+        cleanup();
+        assertThat(requestFrom(TABLET)).isInactiveWithParams(desktopOn);
+        cleanup();
+        assertThat(requestFrom(MOBILE)).isInactiveWithParams(desktopOn);
+        cleanup();
+    }
+
+}

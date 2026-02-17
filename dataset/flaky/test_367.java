@@ -1,0 +1,8 @@
+class DummyClass_367 {
+@Test
+public void testBuildTokenServiceSockAddr() {
+    assertEquals("127.0.0.1:123", SecurityUtil.buildTokenService(new InetSocketAddress("LocalHost", 123)).toString());
+    assertEquals("127.0.0.1:123", SecurityUtil.buildTokenService(new InetSocketAddress("127.0.0.1", 123)).toString());
+    assertEquals("127.0.0.1:123", SecurityUtil.buildTokenService(NetUtils.createSocketAddr("127.0.0.1", 123)).toString());
+}
+}

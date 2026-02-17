@@ -1,0 +1,8 @@
+class DummyClass_176903 {
+  @Test
+  public void testJoinPMMLDelimitedNumbers() {
+    assertEquals("-1.0 2.01 3.5",
+                 TextUtils.joinPMMLDelimitedNumbers(Arrays.asList(-1.0, 2.01, 3.5)));
+  }
+
+}

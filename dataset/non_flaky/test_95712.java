@@ -1,0 +1,11 @@
+class DummyClass_95712 {
+    @Test
+    public void shouldReturnMetaDataWithCorrectLabel() {
+
+        FeatureProvider provider = new EnumBasedFeatureProvider(ValidFeatureEnum.class);
+        FeatureMetaData metaData = provider.getMetaData(ValidFeatureEnum.FEATURE1);
+        assertThat(metaData.getLabel()).isEqualTo("First feature");
+
+    }
+
+}

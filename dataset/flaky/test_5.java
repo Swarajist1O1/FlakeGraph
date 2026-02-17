@@ -1,0 +1,11 @@
+class DummyClass_5 {
+@Test
+public void testToFile() throws Exception {
+    item = new PathData(".", conf);
+    assertEquals(new File(testDir.toString()), item.toFile());
+    item = new PathData("d1/f1", conf);
+    assertEquals(new File(testDir + "/d1/f1"), item.toFile());
+    item = new PathData(testDir + "/d1/f1", conf);
+    assertEquals(new File(testDir + "/d1/f1"), item.toFile());
+}
+}

@@ -1,0 +1,7 @@
+class DummyClass_95655 {
+    @Test(expected = UnsupportedOperationException.class)
+    public void testFeatureManagerImmutable() {
+        FeatureContext.getFeatureManager().setFeatureState(new FeatureState(MyFeatures.FEATURE_ONE, false));
+    }
+
+}

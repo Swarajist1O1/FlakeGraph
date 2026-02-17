@@ -1,0 +1,7 @@
+class DummyClass_135048 {
+    @Test(expected = IOException.class)
+    public void testIpV6AddressWithLeadingZero() throws IOException {
+        NetworkUtils.parseIpv6Address("2001:1db8:100:03:6:ff00:42:8329");
+    }
+
+}

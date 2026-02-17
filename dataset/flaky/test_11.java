@@ -1,0 +1,12 @@
+class DummyClass_11 {
+@Test
+public void getNanoTime() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        long time = mRecyclerView.getNanoTime();
+        assertNotEquals(0, time);
+        assertNotEquals(time, mRecyclerView.getNanoTime());
+    } else {
+        assertEquals(0, mRecyclerView.getNanoTime());
+    }
+}
+}

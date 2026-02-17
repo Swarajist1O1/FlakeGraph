@@ -1,0 +1,9 @@
+class DummyClass_92663 {
+    @Test
+    public void testClient() throws Exception {
+        ConsumerConfig consumer = new ConsumerConfig();
+        consumer.setClient("client");
+        assertThat(consumer.getClient(), equalTo("client"));
+    }
+
+}

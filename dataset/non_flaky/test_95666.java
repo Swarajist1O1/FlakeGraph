@@ -1,0 +1,9 @@
+class DummyClass_95666 {
+    @Test(expected = IllegalStateException.class)
+    public void testIsActiveThrowsWhenNoApplicationContext() {
+        FeatureState featureState = new FeatureState(TestFeatures.FEATURE_ONE, true);
+
+        strategy.isActive(featureState, null);
+    }
+
+}

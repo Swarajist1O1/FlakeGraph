@@ -1,0 +1,10 @@
+class DummyClass_95673 {
+    @Test
+    public void testGetTokenParameterTransformer() {
+        TokenTransformer transformer = strategy.getTokenParameterTransformer();
+
+        assertNotNull(transformer);
+        assertEquals("foo", transformer.transform("FOO"));
+    }
+
+}

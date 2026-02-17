@@ -1,0 +1,16 @@
+class DummyClass_95671 {
+    @Test
+    public void testGetParameters() {
+        Parameter[] parameters = strategy.getParameters();
+
+        assertEquals(1, parameters.length);
+
+        Parameter parameter = parameters[0];
+
+        assertNotNull(parameter);
+        assertEquals(SpringProfileActivationStrategy.PARAM_PROFILES, parameter.getName());
+        assertTrue(Strings.isNotBlank(parameter.getLabel()));
+        assertTrue(Strings.isNotBlank(parameter.getDescription()));
+    }
+
+}

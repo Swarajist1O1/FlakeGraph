@@ -1,0 +1,8 @@
+class DummyClass_204 {
+@Test
+public void testCreateWithTwo() {
+    AISMessage msg = amf.create(split1, split2);
+    assertTrue(msg instanceof AISMessage05);
+    assertEquals(5, msg.getMessageType());
+}
+}

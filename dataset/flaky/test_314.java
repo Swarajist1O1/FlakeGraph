@@ -1,0 +1,9 @@
+class DummyClass_314 {
+@Test
+public void testSetName() throws Exception {
+    Configuration conf = new Configuration();
+    WritableName.setName(SimpleWritable.class, testName);
+    Class<?> test = WritableName.getClass(testName, conf);
+    assertTrue(test.equals(SimpleWritable.class));
+}
+}

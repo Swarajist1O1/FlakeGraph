@@ -1,0 +1,8 @@
+class DummyClass_176891 {
+  @Test
+  public void testHashCode() {
+    assertEquals(new Pair<>(3.0, "foo").hashCode(), new Pair<>(3.0, "foo").hashCode());
+    assertEquals(new Pair<>(null, null).hashCode(), new Pair<>(null, null).hashCode());
+  }
+
+}

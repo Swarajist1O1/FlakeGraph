@@ -1,0 +1,14 @@
+class DummyClass_211 {
+@Test
+public void testLedgerReachMaximumRolloverTime() throws Exception {
+    ManagedLedgerConfig config = new ManagedLedgerConfig();
+    config.setMinimumRolloverTime(1, TimeUnit.MILLISECONDS);
+    config.setMaximumRolloverTime(1, TimeUnit.SECONDS);
+    ManagedLedger ml = factory.open("ledger-reach-maximum-rollover-time", config);
+    long firstLedgerId = ml.addEntry("test".getBytes()).getLedgerId();
+    Awaitility.await()
+    .atMost(1100, TimeUnit.MILLISECONDS)
+    .pollInterval(100, TimeUnit.MILLISECONDS)
+    .until(() -> firstLedgerId != ml.addEntry("test".getBytes()).getLedgerId());
+}
+}

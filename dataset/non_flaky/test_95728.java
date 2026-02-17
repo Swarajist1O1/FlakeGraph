@@ -1,0 +1,12 @@
+class DummyClass_95728 {
+    @Test
+    public void testGetFeatureState() {
+
+        FeatureState state = manager.getFeatureState(MyFeatures.DELETE_USERS);
+        assertEquals(MyFeatures.DELETE_USERS, state.getFeature());
+        assertEquals(true, state.isEnabled());
+        assertEquals("admin", state.getParameter(UsernameActivationStrategy.PARAM_USERS));
+
+    }
+
+}

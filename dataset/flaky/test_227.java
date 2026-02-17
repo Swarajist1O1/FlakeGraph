@@ -1,0 +1,10 @@
+class DummyClass_227 {
+@Test
+@Test(dependsOnMethods = "testCreateJob")
+public void testGetJobListFromRoot() {
+    JobList output = api().jobList("");
+    assertNotNull(output);
+    assertFalse(output.jobs().isEmpty());
+    assertEquals(output.jobs().size(), 2);
+}
+}

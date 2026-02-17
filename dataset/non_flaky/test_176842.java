@@ -1,0 +1,9 @@
+class DummyClass_176842 {
+  @Test
+  public void testParseVector() {
+    assertArrayEquals(
+        new double[] {-1.0, 2.01, 3.5},
+        VectorMath.parseVector(new String[] {"-1.0", "2.01", "3.5"}));
+  }
+
+}

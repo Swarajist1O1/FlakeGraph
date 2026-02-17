@@ -1,0 +1,7 @@
+class DummyClass_135041 {
+    @Test(expected = IOException.class)
+    public void testIpV4AddressToLarge() throws IOException {
+        NetworkUtils.parseIpv4Address("01.123.255.1.1");
+    }
+
+}

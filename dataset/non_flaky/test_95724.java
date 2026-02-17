@@ -1,0 +1,8 @@
+class DummyClass_95724 {
+    @Test
+    public void testGetFeatures() {
+        assertThat(manager.getFeatures())
+            .contains(MyFeatures.DELETE_USERS, MyFeatures.EXPERIMENTAL, MyFeatures.MISSING_STRATEGY);
+    }
+
+}

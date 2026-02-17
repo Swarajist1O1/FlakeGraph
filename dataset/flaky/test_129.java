@@ -1,0 +1,11 @@
+class DummyClass_129 {
+@Test
+public void testWithDirStringAndConf() throws Exception {
+    dirString = "d1";
+    item = new PathData(dirString, conf);
+    checkPathData();
+    dirString = "d1/";
+    item = new PathData(dirString, conf);
+    checkPathData();
+}
+}

@@ -1,0 +1,23 @@
+class DummyClass_95741 {
+    @Test
+    public void shouldDetectVersion1() throws SQLException {
+
+        Connection connection = createConnection();
+        try {
+
+            SchemaUpdater updater = new SchemaUpdater(connection, "TOGGLZ", DefaultMapSerializer.multiline());
+            assertFalse(updater.doesTableExist());
+
+            assertFalse(updater.isSchemaVersion1());
+
+            updater.migrateToVersion1();
+
+            assertTrue(updater.isSchemaVersion1());
+
+        } finally {
+            DbUtils.closeQuietly(connection);
+        }
+
+    }
+
+}

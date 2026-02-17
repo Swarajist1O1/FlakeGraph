@@ -1,0 +1,7 @@
+class DummyClass_176863 {
+  @Test
+  public void testLoadClass2() {
+    assertSame(ArrayList.class, ClassUtils.loadClass(ArrayList.class.getName(), List.class));
+  }
+
+}

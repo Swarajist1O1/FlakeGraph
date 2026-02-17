@@ -1,0 +1,8 @@
+class DummyClass_77528 {
+    @Test
+    public void shouldGetDefaultStringBodyFromDropWizard() throws IOException {
+        final URL url = new URL(RULE_WITH_CLASS.baseUri() + "/test");
+        assertThat(Resources.toString(url, StandardCharsets.UTF_8)).isEqualTo(TestResource.DEFAULT_MESSAGE);
+    }
+
+}

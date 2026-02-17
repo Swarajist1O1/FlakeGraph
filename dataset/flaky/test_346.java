@@ -1,0 +1,8 @@
+class DummyClass_346 {
+@Test
+public void testIsExpiredTimestampYesterday() {
+    LocalDateTime yesterday = LocalDateTime.now().minusDays(1);
+    String timestamp = getTimestampFormatter().format(yesterday);
+    assertTrue(MavenMetadata.isExpiredTimestamp(timestamp), "Timestamp should be stale: " + timestamp);
+}
+}

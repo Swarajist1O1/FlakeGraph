@@ -1,0 +1,12 @@
+class DummyClass_176898 {
+  @Test
+  public void testParseJSON() throws Exception {
+    assertArrayEquals(new String[] {"a", "1", "foo"},
+                      TextUtils.parseJSONArray("[\"a\",\"1\",\"foo\"]"));
+    assertArrayEquals(new String[] {"a", "1", "foo", ""},
+                      TextUtils.parseJSONArray("[\"a\",\"1\",\"foo\",\"\"]"));
+    assertArrayEquals(new String[] {"2.3"}, TextUtils.parseJSONArray("[\"2.3\"]"));
+    assertArrayEquals(new String[] {}, TextUtils.parseJSONArray("[]"));
+  }
+
+}

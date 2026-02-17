@@ -1,0 +1,11 @@
+class DummyClass_176848 {
+  @Test
+  public void testOne() {
+    DoubleWeightedMean mean = new DoubleWeightedMean();
+    mean.increment(1.5);
+    assertEquals(1, mean.getN());
+    assertEquals(1.5, mean.getResult());
+    assertEquals("1.5", mean.toString());
+  }
+
+}

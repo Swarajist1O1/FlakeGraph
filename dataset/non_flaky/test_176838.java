@@ -1,0 +1,7 @@
+class DummyClass_176838 {
+  @Test
+  public void testDotFF() {
+    assertEquals(5.35, VectorMath.dot(VEC1, VEC2), FLOAT_EPSILON);
+  }
+
+}

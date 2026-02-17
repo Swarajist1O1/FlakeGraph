@@ -1,0 +1,12 @@
+class DummyClass_106651 {
+  @Test
+  public void incompleteFileCannotOpen() throws Exception {
+    AlluxioURI expectedPath = BASE_EXPECTED_URI.join("/foo/bar");
+    FileInfo fi = setUpOpenMock(expectedPath);
+    fi.setCompleted(false);
+
+    when(mFileSystem.openFile(expectedPath)).thenThrow(new FileIncompleteException(expectedPath));
+    assertEquals(-ErrorCodes.EFAULT(), mFuseFs.open("/foo/bar", mFileInfo));
+  }
+
+}

@@ -1,0 +1,10 @@
+class DummyClass_95716 {
+    @Test
+    public void shouldReturnInfoLinkIfAnnotationPresent() {
+        FeatureProvider provider = new EnumBasedFeatureProvider(ValidFeatureEnum.class);
+        FeatureMetaData metaData = provider.getMetaData(ValidFeatureEnum.WITH_LINK);
+        assertThat(metaData.getAttributes())
+            .containsValue("https://github.com/togglz/togglz/pull/33");
+    }
+
+}

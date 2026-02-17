@@ -1,0 +1,7 @@
+class DummyClass_135055 {
+    @Test(expected = IOException.class)
+    public void testIpV6AddressStartsWithColon() throws IOException {
+        NetworkUtils.parseIpv6Address(":2001:1db8:100:3:6:ff00:42:8329");
+    }
+
+}

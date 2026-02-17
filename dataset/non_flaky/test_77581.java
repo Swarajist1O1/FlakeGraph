@@ -1,0 +1,26 @@
+class DummyClass_77581 {
+    @Test
+    public void usesAnExecutorServiceFromTheEnvironment() {
+        final JerseyClientConfiguration configuration = new JerseyClientConfiguration();
+        configuration.setMinThreads(7);
+        configuration.setMaxThreads(532);
+        configuration.setWorkQueueSize(16);
+
+        final ExecutorServiceBuilder executorServiceBuilderMock = mock(ExecutorServiceBuilder.class);
+        when(lifecycleEnvironment.executorService("jersey-client-test-%d")).thenReturn(executorServiceBuilderMock);
+
+        when(executorServiceBuilderMock.minThreads(7)).thenReturn(executorServiceBuilderMock);
+        when(executorServiceBuilderMock.maxThreads(532)).thenReturn(executorServiceBuilderMock);
+
+        final ArgumentCaptor<ArrayBlockingQueue> arrayBlockingQueueCaptor =
+                ArgumentCaptor.forClass(ArrayBlockingQueue.class);
+        when(executorServiceBuilderMock.workQueue(arrayBlockingQueueCaptor.capture()))
+                .thenReturn(executorServiceBuilderMock);
+        when(executorServiceBuilderMock.build()).thenReturn(mock(ExecutorService.class));
+
+        builder.using(configuration).using(environment).build("test");
+
+        assertThat(arrayBlockingQueueCaptor.getValue().remainingCapacity()).isEqualTo(16);
+    }
+
+}

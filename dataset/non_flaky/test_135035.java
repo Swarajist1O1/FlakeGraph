@@ -1,0 +1,8 @@
+class DummyClass_135035 {
+    @Test
+    public void testTokenExtraction() {
+
+        Assert.assertEquals("--xyz", Headers.extractTokenFromHeader("multipart/form-data; boundary=--xyz; param=abc", "boundary"));
+    }
+
+}

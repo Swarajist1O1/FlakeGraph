@@ -1,0 +1,52 @@
+class DummyClass_70797 {
+    @Test
+    public void testConnectFrameworkClasses() {
+        assertFalse(PluginUtils.shouldLoadInIsolation("org.apache.kafka.common."));
+        assertFalse(PluginUtils.shouldLoadInIsolation(
+                "org.apache.kafka.common.config.AbstractConfig")
+        );
+        assertFalse(PluginUtils.shouldLoadInIsolation(
+                "org.apache.kafka.common.config.ConfigDef$Type")
+        );
+        assertFalse(PluginUtils.shouldLoadInIsolation(
+                "org.apache.kafka.common.serialization.Deserializer")
+        );
+        assertFalse(PluginUtils.shouldLoadInIsolation("org.apache.kafka.connect."));
+        assertFalse(PluginUtils.shouldLoadInIsolation(
+                "org.apache.kafka.connect.connector.Connector")
+        );
+        assertFalse(PluginUtils.shouldLoadInIsolation(
+                "org.apache.kafka.connect.source.SourceConnector")
+        );
+        assertFalse(PluginUtils.shouldLoadInIsolation(
+                "org.apache.kafka.connect.sink.SinkConnector")
+        );
+        assertFalse(PluginUtils.shouldLoadInIsolation("org.apache.kafka.connect.connector.Task"));
+        assertFalse(PluginUtils.shouldLoadInIsolation(
+                "org.apache.kafka.connect.source.SourceTask")
+        );
+        assertFalse(PluginUtils.shouldLoadInIsolation("org.apache.kafka.connect.sink.SinkTask"));
+        assertFalse(PluginUtils.shouldLoadInIsolation(
+                "org.apache.kafka.connect.transforms.Transformation")
+        );
+        assertFalse(PluginUtils.shouldLoadInIsolation(
+                "org.apache.kafka.connect.storage.Converter")
+        );
+        assertFalse(PluginUtils.shouldLoadInIsolation(
+                "org.apache.kafka.connect.storage.OffsetBackingStore")
+        );
+        assertFalse(PluginUtils.shouldLoadInIsolation(
+                "org.apache.kafka.clients.producer.ProducerConfig")
+        );
+        assertFalse(PluginUtils.shouldLoadInIsolation(
+                "org.apache.kafka.clients.consumer.ConsumerConfig")
+        );
+        assertFalse(PluginUtils.shouldLoadInIsolation(
+                "org.apache.kafka.clients.admin.KafkaAdminClient")
+        );
+        assertFalse(PluginUtils.shouldLoadInIsolation(
+                "org.apache.kafka.connect.rest.ConnectRestExtension")
+        );
+    }
+
+}

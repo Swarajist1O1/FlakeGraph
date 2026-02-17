@@ -1,0 +1,7 @@
+class DummyClass_135043 {
+    @Test(expected = IOException.class)
+    public void testIpV4AddressMultipleDots2() throws IOException {
+        NetworkUtils.parseIpv4Address("1..3.255.2");
+    }
+
+}

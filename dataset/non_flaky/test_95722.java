@@ -1,0 +1,19 @@
+class DummyClass_95722 {
+    @Test
+    public void shouldAddStrategyIfUsingDefaultProvider() {
+
+        DefaultActivationStrategyProvider provider = new DefaultActivationStrategyProvider();
+
+        FeatureManagerBuilder.begin()
+            .featureEnum(Features.class)
+            .activationStrategyProvider(provider)
+            .activationStrategy(new CustomActivationStrategy())
+            .build();
+
+        assertThat(provider.getActivationStrategies())
+            .extracting("id")
+            .contains(CustomActivationStrategy.class.getSimpleName());
+
+    }
+
+}

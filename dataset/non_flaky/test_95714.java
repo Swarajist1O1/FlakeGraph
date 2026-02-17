@@ -1,0 +1,10 @@
+class DummyClass_95714 {
+    @Test
+    public void shouldReturnOwnerNameIfAnnotationPresent() {
+        FeatureProvider provider = new EnumBasedFeatureProvider(ValidFeatureEnum.class);
+        FeatureMetaData metaData = provider.getMetaData(ValidFeatureEnum.WITH_OWNER);
+        assertThat(metaData.getAttributes())
+            .containsValue("Christian");
+    }
+
+}

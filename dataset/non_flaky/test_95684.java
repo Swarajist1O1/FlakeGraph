@@ -1,0 +1,9 @@
+class DummyClass_95684 {
+    @Test
+    public void test() {
+        expectedException.expect(AssertionError.class);
+
+        assertFalse(MyFeatures.F1.isActive());
+    }
+
+}

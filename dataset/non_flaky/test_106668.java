@@ -1,0 +1,19 @@
+class DummyClass_106668 {
+  @Test
+  public void deleteException() throws Exception {
+    AlluxioURI file = new AlluxioURI("/file");
+    DeletePOptions deleteOptions = DeletePOptions.newBuilder().setRecursive(true).build();
+    doThrow(EXCEPTION).when(mFileSystemMasterClient).delete(file,
+        FileSystemOptions.deleteDefaults(mConf)
+            .toBuilder().mergeFrom(deleteOptions).build());
+    try {
+      mFileSystem.delete(file, deleteOptions);
+      fail(SHOULD_HAVE_PROPAGATED_MESSAGE);
+    } catch (Exception e) {
+      assertSame(EXCEPTION, e);
+    }
+
+    verifyFilesystemContextAcquiredAndReleased();
+  }
+
+}

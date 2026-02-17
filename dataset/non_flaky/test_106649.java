@@ -1,0 +1,10 @@
+class DummyClass_106649 {
+  @Test
+  public void mkDirWithLengthLimit() throws Exception {
+    long mode = 0755L;
+    String c256 = String.join("", Collections.nCopies(16, "0123456789ABCDEF"));
+    assertEquals(-ErrorCodes.ENAMETOOLONG(),
+        mFuseFs.mkdir("/foo/" + c256, mode));
+  }
+
+}

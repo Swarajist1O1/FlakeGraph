@@ -1,0 +1,7 @@
+class DummyClass_95707 {
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldFailForNull() {
+        new EnumBasedFeatureProvider(null);
+    }
+
+}

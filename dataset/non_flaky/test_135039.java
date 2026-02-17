@@ -1,0 +1,7 @@
+class DummyClass_135039 {
+    @Test(expected = IOException.class)
+    public void testIpV4AddressWithLeadingZero() throws IOException {
+        NetworkUtils.parseIpv4Address("01.123.255.2");
+    }
+
+}

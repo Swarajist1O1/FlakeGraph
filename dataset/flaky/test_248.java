@@ -1,0 +1,13 @@
+class DummyClass_248 {
+@Test
+public void test() throws Exception {
+    captureErr();
+    new Thread(this::startServer).start();
+    Ignite client = startGrid(getConfiguration("client").setClientMode(true));
+    IgniteServices services = client.services();
+    SimpleService srvc = services.serviceProxy("service", SimpleService.class, false);
+    Thread.sleep(1000);
+    srvc.isWorking();
+    assertFalse(getErr().contains("Cache is not configured:"));
+}
+}

@@ -1,0 +1,22 @@
+class DummyClass_170489 {
+    @Test
+    public void testLocalhostRegistryBindsToLoopback() throws Exception
+    {
+        connectorServer = new ConnectorServer(new JMXServiceURL("service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi"), objectName);
+        connectorServer.start();
+
+        InetAddress localHost = InetAddress.getLocalHost();
+        if (!localHost.isLoopbackAddress())
+        {
+            assertThrows(ConnectException.class, () ->
+            {
+                // Verify that I cannot connect to the RMIRegistry using a non-loopback address.
+                new Socket(localHost, 1099);
+            });
+        }
+
+        InetAddress loopback = InetAddress.getLoopbackAddress();
+        new Socket(loopback, 1099).close();
+    }
+
+}

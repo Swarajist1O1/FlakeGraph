@@ -1,0 +1,8 @@
+class DummyClass_176843 {
+  @Test
+  public void testSmall() {
+    float[] a = { 1.0e-24f };
+    assertEquals(1.0e-24 * 1.0e-24, VectorMath.dot(a, a));
+  }
+
+}

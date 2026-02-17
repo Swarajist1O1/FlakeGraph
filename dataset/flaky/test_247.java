@@ -1,0 +1,9 @@
+class DummyClass_247 {
+@Test
+public void testBuildDTServiceName() {
+    assertEquals("127.0.0.1:123", SecurityUtil.buildDTServiceName(URI.create()));
+    assertEquals("127.0.0.1:123", SecurityUtil.buildDTServiceName(URI.create()));
+    assertEquals("127.0.0.1:123", SecurityUtil.buildDTServiceName(URI.create()));
+    assertEquals("127.0.0.1:123", SecurityUtil.buildDTServiceName(URI.create()));
+}
+}

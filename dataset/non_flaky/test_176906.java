@@ -1,0 +1,11 @@
+class DummyClass_176906 {
+  @Test
+  public void testJSONMap() {
+    Map<Object,Object> map = new HashMap<>();
+    map.put(1, "bar");
+    map.put("foo", 2);
+    assertEquals("[\"A\",{\"1\":\"bar\",\"foo\":2},\"B\"]",
+                 TextUtils.joinJSON(Arrays.asList("A", map, "B")));
+  }
+
+}

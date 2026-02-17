@@ -1,0 +1,16 @@
+class DummyClass_95688 {
+    @Test
+    public void shouldReadFalseStateWithoutStrategyAndParameters() {
+
+        addState(TestFeature.F1.name(), false);
+
+        FeatureState state = repository.getFeatureState(TestFeature.F1);
+
+        assertNotNull(state);
+        assertEquals(TestFeature.F1, state.getFeature());
+        assertEquals(false, state.isEnabled());
+        assertEquals(null, state.getStrategyId());
+        assertEquals(0, state.getParameterNames().size());
+    }
+
+}

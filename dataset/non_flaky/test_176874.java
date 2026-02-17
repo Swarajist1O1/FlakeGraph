@@ -1,0 +1,10 @@
+class DummyClass_176874 {
+  @Test
+  public void testDeleteRecursively() throws IOException {
+    Path testDir = createTestDirs();
+    IOUtils.deleteRecursively(testDir);
+    assertFalse(Files.exists(testDir));
+    assertFalse(Files.exists(testDir.resolve("subFile1")));
+  }
+
+}

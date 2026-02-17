@@ -1,0 +1,15 @@
+class DummyClass_106641 {
+  @Test
+  public void chownWithoutValidUidAndGid() throws Exception {
+    long uid = AlluxioFuseFileSystem.ID_NOT_SET_VALUE;
+    long gid = AlluxioFuseFileSystem.ID_NOT_SET_VALUE;
+    mFuseFs.chown("/foo/bar", uid, gid);
+    verify(mFileSystem, never()).setAttribute(any());
+
+    uid = AlluxioFuseFileSystem.ID_NOT_SET_VALUE_UNSIGNED;
+    gid = AlluxioFuseFileSystem.ID_NOT_SET_VALUE_UNSIGNED;
+    mFuseFs.chown("/foo/bar", uid, gid);
+    verify(mFileSystem, never()).setAttribute(any());
+  }
+
+}

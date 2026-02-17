@@ -1,0 +1,9 @@
+class DummyClass_80 {
+@Test
+public void testUnwrapping() throws Exception {
+    JsonSchema jsonSchema = MAPPER.generateJsonSchema(UnwrappingRoot.class);
+    String json = jsonSchema.toString().replaceAll("\"", "'");
+    String EXP = "{'type':'object'," + ("'properties':{'age':{'type':'integer'}," + "'name.first':{'type':'string'},'name.last':{'type':'string'}}}");
+    assertEquals(EXP, json);
+}
+}

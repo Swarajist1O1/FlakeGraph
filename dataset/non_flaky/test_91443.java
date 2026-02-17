@@ -1,0 +1,58 @@
+class DummyClass_91443 {
+@TestRuleLimitSysouts.Limit(bytes = 14000)
+    public void testTransportClient() throws URISyntaxException, IOException {
+        try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
+            final String str = String.format(
+                    Locale.ROOT,
+                    "http://localhost:%d/wildfly-%s%s/transport/employees/1",
+                    Integer.parseInt(System.getProperty("tests.jboss.http.port")),
+                    Version.CURRENT,
+                    Build.CURRENT.isSnapshot() ? "-SNAPSHOT" : "");
+            final HttpPut put = new HttpPut(new URI(str));
+            final String body;
+            try (XContentBuilder builder = jsonBuilder()) {
+                builder.startObject();
+                {
+                    builder.field("first_name", "John");
+                    builder.field("last_name", "Smith");
+                    builder.field("age", 25);
+                    builder.field("about", "I love to go rock climbing");
+                    builder.startArray("interests");
+                    {
+                        builder.value("sports");
+                        builder.value("music");
+                    }
+                    builder.endArray();
+                }
+                builder.endObject();
+                body = Strings.toString(builder);
+            }
+            put.setEntity(new StringEntity(body, ContentType.APPLICATION_JSON));
+            try (CloseableHttpResponse response = client.execute(put)) {
+                int status = response.getStatusLine().getStatusCode();
+                assertThat("expected a 201 response but got: " + status + " - body: " + EntityUtils.toString(response.getEntity()),
+                        status, equalTo(201));
+            }
+
+            final HttpGet get = new HttpGet(new URI(str));
+            try (
+                    CloseableHttpResponse response = client.execute(get);
+                    XContentParser parser =
+                            JsonXContent.jsonXContent.createParser(
+                                    new NamedXContentRegistry(ClusterModule.getNamedXWriteables()),
+                                    DeprecationHandler.THROW_UNSUPPORTED_OPERATION,
+                                    response.getEntity().getContent())) {
+                final Map<String, Object> map = parser.map();
+                assertThat(map.get("first_name"), equalTo("John"));
+                assertThat(map.get("last_name"), equalTo("Smith"));
+                assertThat(map.get("age"), equalTo(25));
+                assertThat(map.get("about"), equalTo("I love to go rock climbing"));
+                final Object interests = map.get("interests");
+                assertThat(interests, instanceOf(List.class));
+                @SuppressWarnings("unchecked") final List<String> interestsAsList = (List<String>) interests;
+                assertThat(interestsAsList, containsInAnyOrder("sports", "music"));
+            }
+        }
+    }
+
+}

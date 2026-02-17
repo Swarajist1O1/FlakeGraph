@@ -1,0 +1,13 @@
+class DummyClass_95644 {
+    @Test
+    public void shouldBeInactiveForEmptyParams() throws Exception {
+        String[] emptyArguments = new String[]{"", "", ""};
+        assertThat(requestFrom(NORMAL)).isInactiveWithParams(emptyArguments);
+        cleanup();
+        assertThat(requestFrom(TABLET)).isInactiveWithParams(emptyArguments);
+        cleanup();
+        assertThat(requestFrom(MOBILE)).isInactiveWithParams(emptyArguments);
+        cleanup();
+    }
+
+}

@@ -1,0 +1,14 @@
+class DummyClass_66 {
+@Test
+public void incrementUpperLimitIfOneMinuteElapsedSinceLastUpdate() throws InterruptedException {
+    Clock clock = mock(Clock.class);
+    when(clock.getTimeMillis()).thenReturn(0L, TWO_MINUTES_IN_MILLIS, 2 * TWO_MINUTES_IN_MILLIS, 3 * TWO_MINUTES_IN_MILLIS);
+    TimestampBoundStore timestampBoundStore = initialTimestampBoundStore();
+    PersistentTimestampService persistentTimestampService = PersistentTimestampService.create(timestampBoundStore, clock);
+    persistentTimestampService.getFreshTimestamp();
+    Thread.sleep(10);
+    persistentTimestampService.getFreshTimestamp();
+    Thread.sleep(10);
+    verify(timestampBoundStore, atLeast(2)).storeUpperLimit(anyLong());
+}
+}

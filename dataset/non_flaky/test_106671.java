@@ -1,0 +1,16 @@
+class DummyClass_106671 {
+  @Test
+  public void getStatus() throws Exception {
+    AlluxioURI file = new AlluxioURI("/file");
+    URIStatus status = new URIStatus(new FileInfo());
+    GetStatusPOptions getStatusOptions = GetStatusPOptions.getDefaultInstance();
+    when(mFileSystemMasterClient.getStatus(file, FileSystemOptions.getStatusDefaults(mConf)
+        .toBuilder().mergeFrom(getStatusOptions).build())).thenReturn(status);
+    assertSame(status, mFileSystem.getStatus(file, getStatusOptions));
+    verify(mFileSystemMasterClient).getStatus(file, FileSystemOptions.getStatusDefaults(mConf)
+        .toBuilder().mergeFrom(getStatusOptions).build());
+
+    verifyFilesystemContextAcquiredAndReleased();
+  }
+
+}

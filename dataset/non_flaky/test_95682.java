@@ -1,0 +1,9 @@
+class DummyClass_95682 {
+    @Test
+    public void test() {
+        assertTrue(MyFeatures.F1.isActive());
+        assertTrue(MyFeatures.F2.isActive() || !MyFeatures.F2.isActive());
+        assertTrue(MyFeatures.F3.isActive() || !MyFeatures.F3.isActive());
+    }
+
+}

@@ -1,0 +1,9 @@
+class DummyClass_176930 {
+  @Test
+  public void testServingLayer() throws Exception {
+    Map<String,Object> overlay = buildOverlay();
+    Config config = ConfigUtils.overlayOn(overlay, ConfigUtils.getDefault());
+    doTestServingLayer(config);
+  }
+
+}

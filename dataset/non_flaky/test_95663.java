@@ -1,0 +1,13 @@
+class DummyClass_95663 {
+    @Test
+    public void contextClosed() {
+        // Bind application context before context closed event invoked
+        ContextClassLoaderApplicationContextHolder.bind(applicationContext);
+        ContextClosedEvent contextClosedEvent = mock(ContextClosedEvent.class);
+        // Invoke context closed event
+        applicationListener.onApplicationEvent(contextClosedEvent);
+        // Assert application context released
+        assertNull(ContextClassLoaderApplicationContextHolder.get());
+    }
+
+}

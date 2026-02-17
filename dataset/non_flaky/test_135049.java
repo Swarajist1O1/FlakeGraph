@@ -1,0 +1,7 @@
+class DummyClass_135049 {
+    @Test(expected = IOException.class)
+    public void testIpV6AddressToSmall() throws IOException {
+        NetworkUtils.parseIpv6Address("2001:1db8:3:6:ff00:42:8329");
+    }
+
+}

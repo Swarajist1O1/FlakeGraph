@@ -1,0 +1,9 @@
+class DummyClass_95699 {
+	@Test
+	public void empty() {
+		CompositeFeatureProvider provider = new CompositeFeatureProvider();
+		assertThat(provider.getFeatures()).isEmpty();
+		assertThat(provider.getMetaData(new NamedFeature("FOO"))).isNull();
+	}
+
+}

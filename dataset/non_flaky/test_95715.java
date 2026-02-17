@@ -1,0 +1,10 @@
+class DummyClass_95715 {
+    @Test
+    public void shouldReturnNullForOwnerNameByDefault() {
+        FeatureProvider provider = new EnumBasedFeatureProvider(ValidFeatureEnum.class);
+        FeatureMetaData metaData = provider.getMetaData(ValidFeatureEnum.FEATURE1);
+        assertThat(metaData.getAttributes())
+            .doesNotContainValue("Christian");
+    }
+
+}

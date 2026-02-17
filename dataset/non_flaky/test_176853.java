@@ -1,0 +1,11 @@
+class DummyClass_176853 {
+  @Test
+  public void testShutdownHook() {
+    // Can't really test this except to verify that no exception is thrown now or at shutdown
+    JVMUtils.closeAtShutdown(new Closeable() {
+      @Override
+      public void close() {
+        // do nothing
+      }
+
+}

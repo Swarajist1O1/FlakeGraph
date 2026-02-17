@@ -1,0 +1,16 @@
+class DummyClass_106666 {
+  @Test
+  public void createException() throws Exception {
+    doThrow(EXCEPTION).when(mFileSystemMasterClient)
+        .createFile(any(AlluxioURI.class), any(CreateFilePOptions.class));
+    try {
+      mFileSystem.createFile(new AlluxioURI("/"), CreateFilePOptions.getDefaultInstance());
+      fail(SHOULD_HAVE_PROPAGATED_MESSAGE);
+    } catch (Exception e) {
+      assertSame(EXCEPTION, e);
+    }
+
+    verifyFilesystemContextAcquiredAndReleased();
+  }
+
+}

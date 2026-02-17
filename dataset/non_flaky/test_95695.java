@@ -1,0 +1,11 @@
+class DummyClass_95695 {
+    @Test
+    public void buildWillReturnFeatureGroupWhenFeatureGroupAnnotationIsPresentForFieldLevelGroup() throws Exception {
+        FeatureGroup result = AnnotationFeatureGroup.build(FieldLevelGroup.class);
+
+        assertThat(result, notNullValue());
+        assertThat(result.getLabel(), is(FIELD_LEVEL_GROUP_LABEL));
+        assertThat(result.contains(TestFeatures.FEATURE), is(true));
+    }
+
+}

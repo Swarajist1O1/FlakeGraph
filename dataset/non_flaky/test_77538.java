@@ -1,0 +1,11 @@
+class DummyClass_77538 {
+    @Test
+    public void testDefaultJsonProcessingMapper() {
+        assertThat(RESOURCES.target("/person/blah/runtime-exception")
+            .request()
+            .post(Entity.json("{ \"he: \"ho\"}"))
+            .readEntity(String.class))
+            .startsWith("Something went wrong: Unexpected character");
+    }
+
+}

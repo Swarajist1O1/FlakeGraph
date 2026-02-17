@@ -1,0 +1,20 @@
+class DummyClass_26 {
+@Test
+public void testMatchesSpeedTest() throws Exception {
+    int iterations = 15;
+    String password = new RandomValueStringGenerator().generate();
+    String encodedBcrypt = cachingPasswordEncoder.encode(password);
+    long nanoStart = System.nanoTime();
+    for (int i = 0; i < iterations; i++) {
+        assertTrue(cachingPasswordEncoder.getPasswordEncoder().matches(password, encodedBcrypt));
+        long nanoStop = System.nanoTime();
+        long bcryptTime = nanoStop - nanoStart;
+        nanoStart = System.nanoTime();
+        for (int i = 0; i < iterations; i++) {
+            nanoStop = System.nanoTime();
+            long cacheTime = nanoStop - nanoStart;
+            assertTrue(bcryptTime > (10 * cacheTime));
+        }
+    }
+}
+}

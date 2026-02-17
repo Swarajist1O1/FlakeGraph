@@ -1,0 +1,15 @@
+class DummyClass_95659 {
+    @Test
+    public void shouldSupportTogglingUntypedFeature() {
+
+        // enable
+        manager.enable(new NamedFeature("ONE"));
+        assertTrue(manager.isActive(MyFeatures.ONE));
+
+        // disable
+        manager.disable(new NamedFeature("ONE"));
+        assertFalse(manager.isActive(MyFeatures.ONE));
+
+    }
+
+}

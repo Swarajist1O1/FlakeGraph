@@ -1,0 +1,7 @@
+class DummyClass_59 {
+@Test
+public void testBacklogLimiter() {
+    long duration = runWithRate(2 * RateLimiting.DEFAULT_MAX_PARALLELISM,-1.0 , new DelayFn<Integer>());
+    Assert.assertThat(duration,greaterThan(2 * DelayFn.DELAY_MS));
+}
+}

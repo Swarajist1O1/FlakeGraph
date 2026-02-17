@@ -1,0 +1,9 @@
+class DummyClass_198 {
+@Test
+public void testCwdContents() throws Exception {
+    dirString = Path.CUR_DIR;
+    item = new PathData(dirString, conf);
+    PathData[] items = item.getDirectoryContents();
+    assertEquals(sortedString("d1", "d2"), sortedString(items));
+}
+}

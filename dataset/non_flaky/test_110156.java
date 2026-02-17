@@ -1,0 +1,13 @@
+class DummyClass_110156 {
+	@Test
+	public void createDefaultDirectoryManagerPath() throws IOException {
+		Path path = Paths.get(System.getProperty("user.dir"));
+		DirectoryManager dm = DirectoryManagerFactory.createDirectoryManager(
+				path, true);
+		assertTrue(dm instanceof DirectoryManagerImpl);
+		DirectoryManagerImpl dmi = (DirectoryManagerImpl) dm;
+		assertTrue(dmi.readOnly);
+		assertEquals(path, dmi.directory);
+	}
+
+}

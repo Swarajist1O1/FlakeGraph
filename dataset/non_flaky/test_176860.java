@@ -1,0 +1,12 @@
+class DummyClass_176860 {
+  @Test
+  public void testClose() {
+    ReentrantLock lock = new ReentrantLock();
+    assertFalse(lock.isHeldByCurrentThread());
+    AutoLock al = new AutoLock(lock);
+    assertTrue(lock.isHeldByCurrentThread());
+    al.close();
+    assertFalse(lock.isHeldByCurrentThread());
+  }
+
+}

@@ -1,0 +1,10 @@
+class DummyClass_368 {
+@Test
+public void testWrite() throws Exception {
+    FileSystem fs = cluster.getFileSystem();
+    long tStart = System.currentTimeMillis();
+    bench.writeTest(fs);
+    long execTime = System.currentTimeMillis() - tStart;
+    bench.analyzeResult(fs, TestType.TEST_TYPE_WRITE, execTime);
+}
+}

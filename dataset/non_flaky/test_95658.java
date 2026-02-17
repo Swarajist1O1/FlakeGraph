@@ -1,0 +1,17 @@
+class DummyClass_95658 {
+    @Test
+    public void shouldToggleAllFeatures() {
+
+        // enable
+        manager.enableAll();
+        assertTrue(manager.isActive(MyFeatures.ONE));
+        assertTrue(manager.isActive(MyFeatures.TWO));
+
+        // disable
+        manager.disableAll();
+        assertFalse(manager.isActive(MyFeatures.ONE));
+        assertFalse(manager.isActive(MyFeatures.TWO));
+
+    }
+
+}

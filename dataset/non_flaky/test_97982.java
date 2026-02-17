@@ -1,0 +1,19 @@
+class DummyClass_97982 {
+    @Test
+    public void testReplay() throws InterruptedException {
+        final AtomicInteger counter = new AtomicInteger();
+        ConnectableObservable<String> o = Observable.create(new OnSubscribeFunc<String>() {
+
+            @Override
+            public Subscription onSubscribe(final Observer<? super String> observer) {
+                final BooleanSubscription subscription = new BooleanSubscription();
+                new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        counter.incrementAndGet();
+                        observer.onNext("one");
+                        observer.onCompleted();
+                    }
+
+}

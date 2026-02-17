@@ -1,0 +1,16 @@
+class DummyClass_308 {
+@Test
+public void testFromFileToFtp() throws Exception {
+    service.suspend();
+    template.sendBodyAndHeader("file:{{ftp.root.dir}}/reconnect", "Hello World", FILE_NAME, "hello.txt");
+    MockEndpoint mock = getMockEndpoint("mock:result");
+    mock.expectedMessageCount(0);
+    Thread.sleep(3000);
+    assertMockEndpointsSatisfied();
+    mock.reset();
+    mock.expectedMessageCount(1);
+    service.resume();
+    Thread.sleep(3000);
+    assertMockEndpointsSatisfied();
+}
+}
