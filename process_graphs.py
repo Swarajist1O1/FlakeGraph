@@ -11,10 +11,10 @@ from tqdm import tqdm
 INPUT_DIR = "graphs_output"
 OUTPUT_DIR = "processed_tensors"
 
-print("⏳ Loading CodeBERT...")
+print("Loading CodeBERT...")
 tokenizer = AutoTokenizer.from_pretrained("microsoft/codebert-base")
 model = AutoModel.from_pretrained("microsoft/codebert-base")
-device = torch.device("cpu") # Keep CPU for safety
+device = torch.device("cpu")  # Keep CPU for safety
 model = model.to(device)
 
 def parse_dot_manually(filepath):
@@ -68,10 +68,16 @@ def dot_to_tensor(dot_path, label):
             node_data = G.nodes[node_id]
             raw_text = node_data.get('label', "statement")
             
-            if len(raw_text) < 2: 
+            if len(raw_text) < 2:
                 raw_text = "statement"
 
-            inputs = tokenizer(raw_text, return_tensors="pt", truncation=True, max_length=128).to(device)
+            inputs = tokenizer(
+                raw_text,
+                return_tensors="pt",
+                truncation=True,
+                max_length=128
+            ).to(device)
+
             with torch.no_grad():
                 outputs = model(**inputs)
                 embedding = outputs.last_hidden_state.mean(dim=1).squeeze().cpu()
@@ -87,15 +93,19 @@ def dot_to_tensor(dot_path, label):
                 edge_index.append([mapping[src], mapping[dst]])
         
         if not edge_index:
-             edge_index = torch.empty((2, 0), dtype=torch.long)
+            edge_index = torch.empty((2, 0), dtype=torch.long)
         else:
-             edge_index = torch.tensor(edge_index, dtype=torch.long).t().contiguous()
+            edge_index = torch.tensor(edge_index, dtype=torch.long).t().contiguous()
 
-        data = Data(x=x, edge_index=edge_index, y=torch.tensor([label], dtype=torch.float))
+        data = Data(
+            x=x,
+            edge_index=edge_index,
+            y=torch.tensor([label], dtype=torch.float)
+        )
         return data
 
     except Exception as e:
-        print(f"❌ Error processing {dot_path}: {e}")
+        print(f"Error processing {dot_path}: {e}")
         return None
 
 def main():
@@ -104,15 +114,22 @@ def main():
     flaky_graphs = glob.glob(os.path.join(INPUT_DIR, "flaky", "*.dot"))
     non_flaky_graphs = glob.glob(os.path.join(INPUT_DIR, "non_flaky", "*.dot"))
     
-    print(f"🚀 Processing {len(flaky_graphs)} Flaky and {len(non_flaky_graphs)} Non-Flaky graphs...")
+    print(
+        f"Processing {len(flaky_graphs)} Flaky and "
+        f"{len(non_flaky_graphs)} Non-Flaky graphs..."
+    )
 
     count = 0
+
     # Process Flaky
     for graph_file in tqdm(flaky_graphs, desc="Processing Flaky"):
         data = dot_to_tensor(graph_file, label=1)
         if data:
             name = os.path.basename(graph_file).replace('.dot', '.pt')
-            torch.save(data, os.path.join(OUTPUT_DIR, "train", f"flaky_{name}"))
+            torch.save(
+                data,
+                os.path.join(OUTPUT_DIR, "train", f"flaky_{name}")
+            )
             count += 1
 
     # Process Non-Flaky
@@ -120,11 +137,14 @@ def main():
         data = dot_to_tensor(graph_file, label=0)
         if data:
             name = os.path.basename(graph_file).replace('.dot', '.pt')
-            torch.save(data, os.path.join(OUTPUT_DIR, "train", f"safe_{name}"))
+            torch.save(
+                data,
+                os.path.join(OUTPUT_DIR, "train", f"safe_{name}")
+            )
             count += 1
 
-    print(f"\n✅ SUCCESS! Saved {count} tensor files to 'processed_tensors/train/'")
-    print("👉 Now run: python train_model.py")
+    print(f"\nSUCCESS! Saved {count} tensor files to 'processed_tensors/train/'")
+    print("Now run: python train_model.py")
 
 if __name__ == "__main__":
     main()

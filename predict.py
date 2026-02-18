@@ -33,15 +33,15 @@ device = torch.device('cpu')
 model = FlakyGAT(hidden_channels=64).to(device)
 
 if not os.path.exists(MODEL_PATH):
-    print("❌ Model not found.")
+    print("Model not found.")
     exit()
 
 model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
 model.eval()
-print("✅ Model Loaded!")
+print("Model Loaded!")
 
 # --- GATHER BALANCED BATCH FROM TENSORS ---
-print(f"\n🔍 Scanning {DATA_DIR} for .pt files...")
+print(f"\nScanning {DATA_DIR} for .pt files...")
 all_files = glob.glob(os.path.join(DATA_DIR, "*.pt"))
 random.shuffle(all_files)
 
@@ -59,12 +59,13 @@ for f in all_files:
             flaky_tensors.append(f)
         elif label == 0 and len(safe_tensors) < 10:
             safe_tensors.append(f)
-    except: pass
+    except:
+        pass
 
 print(f"   Found {len(flaky_tensors)} Flaky and {len(safe_tensors)} Safe tensors.")
 
 if len(flaky_tensors) < 5:
-    print("❌ Not enough Flaky tensors found. Did process_graphs.py run correctly?")
+    print("Not enough Flaky tensors found. Did process_graphs.py run correctly?")
     exit()
 
 # Combine 5 of each for the test
@@ -90,18 +91,21 @@ for f in test_batch:
         probs = F.softmax(out, dim=1)
         prob = probs[0][1].item()
     
-    pred_str = "FLAKY ⚠️" if prob >= THRESHOLD else "Safe ✅"
+    pred_str = "FLAKY" if prob >= THRESHOLD else "Safe"
     
     # Grade
     is_correct = False
-    if real_label == 1 and prob >= THRESHOLD: is_correct = True
-    if real_label == 0 and prob < THRESHOLD: is_correct = True
+    if real_label == 1 and prob >= THRESHOLD:
+        is_correct = True
+    if real_label == 0 and prob < THRESHOLD:
+        is_correct = True
     
-    res_icon = "✅ Correct" if is_correct else "❌ WRONG"
-    if is_correct: correct += 1
+    res_icon = "Correct" if is_correct else "WRONG"
+    if is_correct:
+        correct += 1
     
     fname = os.path.basename(f).replace(".pt", "")
     print(f"{fname:<20} | {truth_str:<10} | {pred_str:<10} | {prob:.1%}     | {res_icon}")
 
 print("-" * 80)
-print(f"🎯 Accuracy: {correct}/10")
+print(f"Accuracy: {correct}/10")

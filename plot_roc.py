@@ -7,7 +7,7 @@ import glob
 import os
 
 # --- CONFIGURATION ---
-MODEL_PATH = "flaky_detector_final_90.pth"
+MODEL_PATH = "flaky_detector_final.pth"
 DATA_DIR = "processed_tensors/train"
 
 # --- MODEL DEFINITION ---
@@ -36,11 +36,11 @@ if os.path.exists(MODEL_PATH):
     model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
     model.eval()
 else:
-    print("❌ Model not found.")
+    print("Model not found.")
     exit()
 
 # --- GATHER PROBABILITIES ---
-print("📥 Loading data for ROC calculation...")
+print("Loading data for ROC calculation...")
 files = glob.glob(os.path.join(DATA_DIR, "*.pt"))
 y_true = []
 y_probs = []
@@ -54,7 +54,8 @@ for f in files:
             out = model(data.x, data.edge_index, data.batch)
             probs = F.softmax(out, dim=1)
             y_probs.append(probs[0][1].item())
-    except: pass
+    except:
+        pass
 
 # --- CALCULATE ROC ---
 fpr, tpr, thresholds = roc_curve(y_true, y_probs)
@@ -62,8 +63,21 @@ roc_auc = auc(fpr, tpr)
 
 # --- PLOT ROC CURVE ---
 plt.figure(figsize=(8, 6))
-plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (AUC = {roc_auc:.2f})')
-plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--', label='Random Guessing')
+plt.plot(
+    fpr,
+    tpr,
+    color='darkorange',
+    lw=2,
+    label=f'ROC curve (AUC = {roc_auc:.2f})'
+)
+plt.plot(
+    [0, 1],
+    [0, 1],
+    color='navy',
+    lw=2,
+    linestyle='--',
+    label='Random Guessing'
+)
 plt.xlim([0.0, 1.0])
 plt.ylim([0.0, 1.05])
 plt.xlabel('False Positive Rate (False Alarms)')
@@ -72,4 +86,4 @@ plt.title('Receiver Operating Characteristic (ROC)')
 plt.legend(loc="lower right")
 plt.grid(alpha=0.3)
 plt.savefig('roc_curve.png')
-print(f"💾 ROC Curve saved as 'roc_curve.png' (AUC Score: {roc_auc:.4f})")
+print(f"ROC Curve saved as 'roc_curve.png' (AUC Score: {roc_auc:.4f})")

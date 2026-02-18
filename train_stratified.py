@@ -23,14 +23,14 @@ HIDDEN_CHANNELS = 64
 EPOCHS = 30
 LEARNING_RATE = 0.001
 
-print(f"📂 Loading tensors from: {os.path.abspath(DATA_DIR)}")
+print(f"Loading tensors from: {os.path.abspath(DATA_DIR)}")
 files = glob.glob(os.path.join(DATA_DIR, "*.pt"))
 dataset = []
 labels = []
 
 # 2. Load Data & Extract Labels for Stratification
 if not files:
-    print("❌ No files found! Run process_graphs.py first.")
+    print("No files found! Run process_graphs.py first.")
     exit()
 
 print("   Loading dataset into memory (this may take a moment)...")
@@ -38,37 +38,27 @@ for file in files:
     try:
         data = torch.load(file, weights_only=False)
         dataset.append(data)
-        labels.append(int(data.y.item())) # 0 or 1
+        labels.append(int(data.y.item()))  # 0 or 1
     except:
         pass
 
 # 3. STRATIFIED SPLIT (The Fix)
-# This forces the Train/Test split to have the EXACT same ratio of Flaky/Safe
-print("✂️  Performing Stratified Split (80/20)...")
+print("   Performing Stratified Split (80/20)...")
 
 train_data, test_data, train_labels, test_labels = train_test_split(
-    dataset, labels, 
-    test_size=0.20, 
-    random_state=SEED, 
-    stratify=labels  # <--- THIS IS THE KEY
+    dataset,
+    labels,
+    test_size=0.20,
+    random_state=SEED,
+    stratify=labels
 )
 
 print(f"   Train Set: {len(train_data)} files | Test Set: {len(test_data)} files")
 
-# 4. Calculate Weights based on TRAINING data only
-# We shouldn't peek at Test data for weights
-# train_counts = Counter(train_labels)
-# n_safe = train_counts[0]
-# n_flaky = train_counts[1]
+# 4. Manual Class Weights
+class_weights = torch.tensor([1.0, 100.0])
 
-# print(f"📊 Training Balance: {n_safe} Safe vs {n_flaky} Flaky")
-# weight_flaky = n_safe / n_flaky # Simple ratio: if 100 safe and 10 flaky, weight is 10.0
-# class_weights = torch.tensor([1.0, weight_flaky])
-
-# print(f"⚖️  Applied Weights: Safe=1.0, Flaky={weight_flaky:.2f}")
-class_weights = torch.tensor([1.0, 100.0]) 
-
-print(f"⚖️  Manual Weights applied: Safe=1.0, Flaky=10.0")
+print(f"   Manual Weights applied: Safe=1.0, Flaky=10.0")
 
 # 5. Dataloaders
 train_loader = DataLoader(train_data, batch_size=BATCH_SIZE, shuffle=True)
@@ -98,7 +88,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
 criterion = torch.nn.CrossEntropyLoss(weight=class_weights.to(device))
 
 # 7. Training Loop
-print("\n🚀 Starting Training...")
+print("\nStarting Training...")
 
 def train():
     model.train()
@@ -131,7 +121,7 @@ for epoch in range(1, EPOCHS + 1):
         print(f'Epoch: {epoch:03d}, Loss: {loss:.4f}')
 
 # 8. Final Report
-print("\n📊 FINAL RESULTS")
+print("\nFINAL RESULTS")
 preds, actuals = test(test_loader)
 print(classification_report(actuals, preds, target_names=['Safe', 'Flaky']))
 print("Confusion Matrix:")
@@ -142,4 +132,4 @@ from sklearn.metrics import recall_score
 flaky_recall = recall_score(actuals, preds, pos_label=1)
 if flaky_recall > 0.70:
     torch.save(model.state_dict(), "flaky_detector_imbalanced.pth")
-    print("💾 Model Saved!")
+    print("Model Saved!")

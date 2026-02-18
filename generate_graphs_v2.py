@@ -16,13 +16,13 @@ OUTPUT_DIR = "graphs_output"
 def check_tools():
     """Verifies that Joern is actually installed and reachable."""
     if not shutil.which(JOERN_PARSE):
-        print(f"❌ CRITICAL ERROR: Could not find '{JOERN_PARSE}' in your PATH.")
+        print(f"CRITICAL ERROR: Could not find '{JOERN_PARSE}' in your PATH.")
         print("   Try running: source ~/.bashrc (or wherever you added Joern)")
         return False
     if not shutil.which(JOERN_EXPORT):
-        print(f"❌ CRITICAL ERROR: Could not find '{JOERN_EXPORT}'.")
+        print(f"CRITICAL ERROR: Could not find '{JOERN_EXPORT}'.")
         return False
-    print("✅ Joern tools found!")
+    print("Joern tools found!")
     return True
 
 def generate_cpg(java_file, output_root):
@@ -39,7 +39,6 @@ def generate_cpg(java_file, output_root):
     
     try:
         # 1. Run Joern Parse
-        # Removed timeout, added error capturing
         subprocess.run(
             cmd_parse, 
             stdout=subprocess.DEVNULL, 
@@ -49,7 +48,7 @@ def generate_cpg(java_file, output_root):
         
         # 2. Run Joern Export
         if not os.path.exists(cpg_bin):
-            return "❌ Parse Failed (No BIN file created)"
+            return "Parse Failed (No BIN file created)"
             
         subprocess.run(
             cmd_export, 
@@ -62,7 +61,7 @@ def generate_cpg(java_file, output_root):
         found_dots = list(Path(temp_export_dir).rglob("*.dot"))
         
         if not found_dots:
-            return "⚠️ Export Failed (No DOT files found in temp folder)"
+            return "Export Failed (No DOT files found in temp folder)"
             
         # 4. Filter best file (Largest one is usually the logic)
         best_file = max(found_dots, key=os.path.getsize)
@@ -70,21 +69,24 @@ def generate_cpg(java_file, output_root):
         shutil.move(str(best_file), final_graph_file)
         
         # Cleanup
-        if os.path.exists(cpg_bin): os.remove(cpg_bin)
-        if os.path.exists(temp_export_dir): shutil.rmtree(temp_export_dir)
+        if os.path.exists(cpg_bin):
+            os.remove(cpg_bin)
+        if os.path.exists(temp_export_dir):
+            shutil.rmtree(temp_export_dir)
         
-        return "✅ Success"
+        return "Success"
 
     except subprocess.CalledProcessError as e:
-        # This captures if Joern crashed
         error_msg = e.stderr.decode("utf-8").strip() if e.stderr else "Unknown Error"
-        return f"💥 Joern Error: {error_msg[:100]}..." # Print first 100 chars
+        return f"Joern Error: {error_msg[:100]}..."
     except Exception as e:
-        return f"❌ Python Error: {e}"
+        return f"Python Error: {e}"
     finally:
         # Always cleanup temp bin/folder
-        if os.path.exists(cpg_bin): os.remove(cpg_bin)
-        if os.path.exists(temp_export_dir): shutil.rmtree(temp_export_dir)
+        if os.path.exists(cpg_bin):
+            os.remove(cpg_bin)
+        if os.path.exists(temp_export_dir):
+            shutil.rmtree(temp_export_dir)
 
 def main():
     if not check_tools():
@@ -97,7 +99,7 @@ def main():
     flaky_files = glob.glob(os.path.join(DATASET_DIR, "flaky", "*.java"))
     non_flaky_files = glob.glob(os.path.join(DATASET_DIR, "non_flaky", "*.java"))
     
-    print(f"🚀 Processing {len(flaky_files)} Flaky and {len(non_flaky_files)} Non-Flaky files...")
+    print(f"Processing {len(flaky_files)} Flaky and {len(non_flaky_files)} Non-Flaky files...")
     
     success_count = 0
     fail_count = 0
@@ -105,35 +107,30 @@ def main():
     # Process Flaky
     for i, f in enumerate(tqdm(flaky_files, desc="Flaky Files")):
         res = generate_cpg(f, os.path.join(OUTPUT_DIR, "flaky"))
-        if "✅" in res:
+        if "Success" in res:
             success_count += 1
         else:
             fail_count += 1
-            # Print the error for the first 5 failures ONLY
             if fail_count <= 5:
-                tqdm.write(f"❌ Failed {os.path.basename(f)}: {res}")
+                tqdm.write(f"Failed {os.path.basename(f)}: {res}")
 
-    # Process Non-Flaky (Using all 8000+ this time?)
-    # You might want to limit this if your CPU is slow. 
-    # Uncomment next line to only do first 1000
-    # non_flaky_files = non_flaky_files[:1000] 
-    
+    # Process Non-Flaky
     for f in tqdm(non_flaky_files, desc="Non-Flaky Files"):
         res = generate_cpg(f, os.path.join(OUTPUT_DIR, "non_flaky"))
-        if "✅" in res:
+        if "Success" in res:
             success_count += 1
         else:
             fail_count += 1
             if fail_count <= 5:
-                 tqdm.write(f"❌ Failed {os.path.basename(f)}: {res}")
+                tqdm.write(f"Failed {os.path.basename(f)}: {res}")
 
-    print("\n" + "="*40)
-    print(f"🎉 DONE!")
-    print(f"✅ Successful Conversions: {success_count}")
-    print(f"❌ Failures: {fail_count}")
+    print("\n" + "=" * 40)
+    print("DONE!")
+    print(f"Successful Conversions: {success_count}")
+    print(f"Failures: {fail_count}")
     if success_count + fail_count > 0:
-        print(f"📊 Success Rate: {success_count / (success_count + fail_count):.1%}")
-    print("="*40)
+        print(f"Success Rate: {success_count / (success_count + fail_count):.1%}")
+    print("=" * 40)
 
 if __name__ == "__main__":
     main()
