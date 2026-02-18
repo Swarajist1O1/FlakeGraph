@@ -79,8 +79,8 @@ node [shape="rect"];
   "30064771073" -> "124554051584"  [ label = "DDG: singletonList(person)"] 
   "30064771073" -> "124554051584"  [ label = "DDG: assertThat(resourceTestRule.target(&quot;/person/blah/list&quot;).request().get(new GenericType&lt;List&lt;Person&gt;&gt;() {
 })).isEqualTo(Collections.singletonList(person))"] 
-  "30064771077" -> "124554051584"  [ label = "DDG: resourceTestRule"] 
   "30064771080" -> "124554051584"  [ label = "DDG: person"] 
+  "30064771077" -> "124554051584"  [ label = "DDG: resourceTestRule"] 
   "107374182400" -> "111669149698"  [ label = "DDG: "] 
   "30064771074" -> "30064771073"  [ label = "DDG: this"] 
   "30064771074" -> "30064771073"  [ label = "DDG: target(&quot;/person/blah/list&quot;).request().get(new GenericType&lt;List&lt;Person&gt;&gt;() {

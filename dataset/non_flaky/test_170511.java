@@ -18,4 +18,6 @@ class DummyClass_170511 {
                 assertEquals("org.eclipse.jetty.annotations.ClassA", info.getClassName());
             }
 
+        }
+    }
 }

@@ -349,9 +349,9 @@ node [shape="rect"];
   "107374182400" -> "30064771104"  [ label = "DDG: "] 
   "30064771105" -> "30064771104"  [ label = "DDG: ZookeeperRegistryCenterModifyTest.class"] 
   "30064771087" -> "30064771105"  [ label = "DDG: ZookeeperRegistryCenterModifyTest.class"] 
-  "30064771094" -> "30064771097"  [ label = "CDG: "] 
   "30064771094" -> "30064771098"  [ label = "CDG: "] 
-  "30064771094" -> "30064771095"  [ label = "CDG: "] 
+  "30064771094" -> "30064771097"  [ label = "CDG: "] 
   "30064771094" -> "30064771096"  [ label = "CDG: "] 
+  "30064771094" -> "30064771095"  [ label = "CDG: "] 
   "30064771094" -> "30064771094"  [ label = "CDG: "] 
 }

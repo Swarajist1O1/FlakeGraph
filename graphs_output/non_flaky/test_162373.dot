@@ -1,0 +1,97 @@
+digraph "timeoutWorks" {  
+node [shape="rect"];  
+"107374182400" [label = <METHOD, 2<BR/>timeoutWorks> ]
+"111669149698" [label = <PARAM, 2<BR/>this> ]
+"25769803776" [label = <BLOCK, 3<BR/>&lt;empty&gt;> ]
+"94489280512" [label = <LOCAL, 4<BR/>Future&lt;Void&gt; lazyFuture: ANY> ]
+"30064771073" [label = <&lt;operator&gt;.assignment, 4<BR/>Future lazyFuture = new LazyFuture&lt;Void&gt;() { ...> ]
+"68719476742" [label = <IDENTIFIER, 4<BR/>lazyFuture<BR/>Future lazyFuture = new LazyFuture&lt;Void&gt;() { ...> ]
+"30064771074" [label = <&lt;operator&gt;.alloc, 4<BR/>new LazyFuture&lt;Void&gt;() { @Override @Sn...> ]
+"30064771072" [label = <&lt;init&gt;, 4<BR/>new LazyFuture&lt;Void&gt;() { @Override @Sn...> ]
+"68719476740" [label = <IDENTIFIER, 4<BR/>lazyFuture<BR/>new LazyFuture&lt;Void&gt;() { @Override @Sn...> ]
+"68719476741" [label = <IDENTIFIER, 4<BR/>this<BR/>new LazyFuture&lt;Void&gt;() { @Override @Sn...> ]
+"30064771075" [label = <assertThrows, 13<BR/>assertThrows(&quot;Should timeout&quot;, TimeoutException...> ]
+"68719476738" [label = <IDENTIFIER, 13<BR/>this<BR/>assertThrows(&quot;Should timeout&quot;, TimeoutException...> ]
+"90194313216" [label = <LITERAL, 13<BR/>&quot;Should timeout&quot;<BR/>assertThrows(&quot;Should timeout&quot;, TimeoutException...> ]
+"30064771076" [label = <&lt;operator&gt;.fieldAccess, 13<BR/>TimeoutException.class> ]
+"68719476743" [label = <IDENTIFIER, 13<BR/>TimeoutException<BR/>assertThrows(&quot;Should timeout&quot;, TimeoutException...> ]
+"55834574848" [label = <FIELD_IDENTIFIER, 13<BR/>class> ]
+"120259084288" [label = <METHOD_REF<BR/>DummyClass_162373.&lt;lambda&gt;0:&lt;unresolvedSignatur...<BR/>assertThrows(&quot;Should timeout&quot;, TimeoutException...> ]
+"30064771077" [label = <pass, 14<BR/>pass(&quot;timeout works&quot;)> ]
+"68719476739" [label = <IDENTIFIER, 14<BR/>this<BR/>pass(&quot;timeout works&quot;)> ]
+"90194313217" [label = <LITERAL, 14<BR/>&quot;timeout works&quot;<BR/>pass(&quot;timeout works&quot;)> ]
+"128849018880" [label = <MODIFIER, 2<BR/>PUBLIC> ]
+"128849018881" [label = <MODIFIER, 2<BR/>VIRTUAL> ]
+"0" [label = <ANNOTATION, 2<BR/>@Test(timeout = 5_000)> ]
+"12884901888" [label = <ANNOTATION_PARAMETER_ASSIGN<BR/>timeout = 5_000> ]
+"8589934592" [label = <ANNOTATION_PARAMETER<BR/>timeout> ]
+"4294967296" [label = <ANNOTATION_LITERAL, 2<BR/>5_000> ]
+"124554051584" [label = <METHOD_RETURN, 3<BR/>void> ]
+  "107374182400" -> "111669149698"  [ label = "AST: "] 
+  "107374182400" -> "25769803776"  [ label = "AST: "] 
+  "107374182400" -> "128849018880"  [ label = "AST: "] 
+  "107374182400" -> "128849018881"  [ label = "AST: "] 
+  "107374182400" -> "0"  [ label = "AST: "] 
+  "107374182400" -> "124554051584"  [ label = "AST: "] 
+  "25769803776" -> "94489280512"  [ label = "AST: "] 
+  "25769803776" -> "30064771073"  [ label = "AST: "] 
+  "25769803776" -> "30064771072"  [ label = "AST: "] 
+  "25769803776" -> "30064771075"  [ label = "AST: "] 
+  "25769803776" -> "30064771077"  [ label = "AST: "] 
+  "30064771073" -> "68719476742"  [ label = "AST: "] 
+  "30064771073" -> "30064771074"  [ label = "AST: "] 
+  "30064771072" -> "68719476740"  [ label = "AST: "] 
+  "30064771072" -> "68719476741"  [ label = "AST: "] 
+  "30064771075" -> "68719476738"  [ label = "AST: "] 
+  "30064771075" -> "90194313216"  [ label = "AST: "] 
+  "30064771075" -> "30064771076"  [ label = "AST: "] 
+  "30064771075" -> "120259084288"  [ label = "AST: "] 
+  "30064771076" -> "68719476743"  [ label = "AST: "] 
+  "30064771076" -> "55834574848"  [ label = "AST: "] 
+  "30064771077" -> "68719476739"  [ label = "AST: "] 
+  "30064771077" -> "90194313217"  [ label = "AST: "] 
+  "0" -> "12884901888"  [ label = "AST: "] 
+  "12884901888" -> "8589934592"  [ label = "AST: "] 
+  "12884901888" -> "4294967296"  [ label = "AST: "] 
+  "30064771073" -> "30064771072"  [ label = "CFG: "] 
+  "30064771072" -> "55834574848"  [ label = "CFG: "] 
+  "30064771075" -> "30064771077"  [ label = "CFG: "] 
+  "30064771077" -> "124554051584"  [ label = "CFG: "] 
+  "30064771074" -> "30064771073"  [ label = "CFG: "] 
+  "30064771076" -> "120259084288"  [ label = "CFG: "] 
+  "120259084288" -> "30064771075"  [ label = "CFG: "] 
+  "55834574848" -> "30064771076"  [ label = "CFG: "] 
+  "107374182400" -> "30064771074"  [ label = "CFG: "] 
+  "30064771073" -> "124554051584"  [ label = "DDG: Future lazyFuture = new LazyFuture&lt;Void&gt;() {
+
+    @Override
+    @SneakyThrows(InterruptedException.class)
+    protected Void resolve() {
+        TimeUnit.MINUTES.sleep(1);
+        return null;
+    }
+}"] 
+  "30064771072" -> "124554051584"  [ label = "DDG: lazyFuture"] 
+  "30064771072" -> "124554051584"  [ label = "DDG: new LazyFuture&lt;Void&gt;() {
+
+    @Override
+    @SneakyThrows(InterruptedException.class)
+    protected Void resolve() {
+        TimeUnit.MINUTES.sleep(1);
+        return null;
+    }
+}"] 
+  "30064771075" -> "124554051584"  [ label = "DDG: TimeoutException.class"] 
+  "30064771075" -> "124554051584"  [ label = "DDG: assertThrows(&quot;Should timeout&quot;, TimeoutException.class, &lt;lambda&gt;)"] 
+  "30064771077" -> "124554051584"  [ label = "DDG: this"] 
+  "30064771077" -> "124554051584"  [ label = "DDG: pass(&quot;timeout works&quot;)"] 
+  "107374182400" -> "111669149698"  [ label = "DDG: "] 
+  "107374182400" -> "30064771073"  [ label = "DDG: "] 
+  "30064771073" -> "30064771072"  [ label = "DDG: lazyFuture"] 
+  "107374182400" -> "30064771072"  [ label = "DDG: "] 
+  "111669149698" -> "30064771072"  [ label = "DDG: this"] 
+  "30064771072" -> "30064771075"  [ label = "DDG: this"] 
+  "107374182400" -> "30064771075"  [ label = "DDG: "] 
+  "30064771075" -> "30064771077"  [ label = "DDG: this"] 
+  "107374182400" -> "30064771077"  [ label = "DDG: "] 
+}

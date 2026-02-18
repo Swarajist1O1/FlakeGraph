@@ -1,17 +1,16 @@
 import torch
-import os
-import networkx as nx
-import re
-from torch_geometric.data import Data
-from transformers import AutoTokenizer, AutoModel
-from torch_geometric.nn import GATConv, global_mean_pool
 import torch.nn.functional as F
+from torch_geometric.nn import GATConv, global_mean_pool
+import os
+import glob
+import random
 
 # --- CONFIGURATION ---
-MODEL_PATH = "flaky_detector.pth"
-HIDDEN_CHANNELS = 64
+MODEL_PATH = "flaky_detector_final.pth" 
+DATA_DIR = "processed_tensors/train"  # Where your .pt files are
+THRESHOLD = 0.80
 
-# 1. Define the Architecture (Must match training!)
+# --- MODEL DEFINITION ---
 class FlakyGAT(torch.nn.Module):
     def __init__(self, hidden_channels):
         super(FlakyGAT, self).__init__()
@@ -22,73 +21,87 @@ class FlakyGAT(torch.nn.Module):
     def forward(self, x, edge_index, batch):
         x = self.conv1(x, edge_index)
         x = F.relu(x)
+        x = F.dropout(x, p=0.4, training=self.training)
         x = self.conv2(x, edge_index)
         x = F.relu(x)
         x = global_mean_pool(x, batch)
         x = self.lin(x)
         return x
 
-# 2. Load the Brain
-print("⏳ Loading Model...")
+# --- LOAD MODEL ---
 device = torch.device('cpu')
-model = FlakyGAT(HIDDEN_CHANNELS).to(device)
-model.load_state_dict(torch.load(MODEL_PATH, weights_only=False))
+model = FlakyGAT(hidden_channels=64).to(device)
+
+if not os.path.exists(MODEL_PATH):
+    print("❌ Model not found.")
+    exit()
+
+model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
 model.eval()
 print("✅ Model Loaded!")
 
-# 3. Load CodeBERT (For translation)
-tokenizer = AutoTokenizer.from_pretrained("microsoft/codebert-base")
-bert_model = AutoModel.from_pretrained("microsoft/codebert-base").to(device)
+# --- GATHER BALANCED BATCH FROM TENSORS ---
+print(f"\n🔍 Scanning {DATA_DIR} for .pt files...")
+all_files = glob.glob(os.path.join(DATA_DIR, "*.pt"))
+random.shuffle(all_files)
 
-def predict_single_file(dot_file):
-    # A. Manual Parsing (Same as before)
-    G = nx.DiGraph()
-    with open(dot_file, 'r') as f:
-        for line in f:
-            node_match = re.search(r'"(\d+)"\s*\[\s*label\s*=\s*"(.*)"\s*\]', line)
-            if node_match:
-                G.add_node(node_match.group(1), label=node_match.group(2).replace('\\"', '"'))
-            edge_match = re.search(r'"(\d+)"\s*->\s*"(\d+)"', line)
-            if edge_match:
-                G.add_edge(edge_match.group(1), edge_match.group(2))
+flaky_tensors = []
+safe_tensors = []
 
-    if len(G.nodes()) == 0: return "Error: Empty Graph"
+# Find 10 of each
+for f in all_files:
+    if len(flaky_tensors) >= 10 and len(safe_tensors) >= 10:
+        break
+    try:
+        data = torch.load(f, weights_only=False)
+        label = int(data.y.item())
+        if label == 1 and len(flaky_tensors) < 10:
+            flaky_tensors.append(f)
+        elif label == 0 and len(safe_tensors) < 10:
+            safe_tensors.append(f)
+    except: pass
 
-    # B. Vectorize
-    node_features = []
-    mapping = {node: i for i, node in enumerate(G.nodes())}
+print(f"   Found {len(flaky_tensors)} Flaky and {len(safe_tensors)} Safe tensors.")
+
+if len(flaky_tensors) < 5:
+    print("❌ Not enough Flaky tensors found. Did process_graphs.py run correctly?")
+    exit()
+
+# Combine 5 of each for the test
+test_batch = flaky_tensors[:5] + safe_tensors[:5]
+random.shuffle(test_batch)
+
+# --- RUN TEST ---
+print(f"\n{'FILE ID':<20} | {'TRUE LABEL':<10} | {'PREDICTION':<10} | {'CONFIDENCE':<10} | {'RESULT'}")
+print("-" * 80)
+
+correct = 0
+for f in test_batch:
+    data = torch.load(f, weights_only=False)
+    data = data.to(device)
     
-    for node_id in G.nodes():
-        text = G.nodes[node_id].get('label', "stmt")
-        inputs = tokenizer(text, return_tensors="pt", truncation=True, max_length=128).to(device)
-        with torch.no_grad():
-            emb = bert_model(**inputs).last_hidden_state.mean(dim=1).squeeze()
-        node_features.append(emb)
-
-    x = torch.stack(node_features)
-    edge_index = torch.tensor([[mapping[src], mapping[dst]] for src, dst in G.edges()], dtype=torch.long).t().contiguous()
+    # Truth
+    real_label = int(data.y.item())
+    truth_str = "FLAKY" if real_label == 1 else "Safe"
     
-    # C. Predict
-    data = Data(x=x, edge_index=edge_index).to(device)
-    # Batch must be all zeros for a single graph
-    data.batch = torch.zeros(x.size(0), dtype=torch.long).to(device)
-    
+    # Predict
     with torch.no_grad():
         out = model(data.x, data.edge_index, data.batch)
         probs = F.softmax(out, dim=1)
-        pred = out.argmax(dim=1).item()
-        confidence = probs[0][pred].item()
+        prob = probs[0][1].item()
+    
+    pred_str = "FLAKY ⚠️" if prob >= THRESHOLD else "Safe ✅"
+    
+    # Grade
+    is_correct = False
+    if real_label == 1 and prob >= THRESHOLD: is_correct = True
+    if real_label == 0 and prob < THRESHOLD: is_correct = True
+    
+    res_icon = "✅ Correct" if is_correct else "❌ WRONG"
+    if is_correct: correct += 1
+    
+    fname = os.path.basename(f).replace(".pt", "")
+    print(f"{fname:<20} | {truth_str:<10} | {pred_str:<10} | {prob:.1%}     | {res_icon}")
 
-    return "FLAKY ⚠️" if pred == 1 else "Safe ✅", confidence
-
-# --- TEST ON A FILE ---
-# Pick a random file from your output folder to test
-test_file = "graphs_output/flaky/test_1.dot" 
-
-if os.path.exists(test_file):
-    result, conf = predict_single_file(test_file)
-    print(f"\n🔎 Result for {test_file}:")
-    print(f"   Prediction: {result}")
-    print(f"   Confidence: {conf:.2%}")
-else:
-    print(f"\n❌ Could not find {test_file}. Please update the path in the script.")
+print("-" * 80)
+print(f"🎯 Accuracy: {correct}/10")
